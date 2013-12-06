@@ -1,14 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'airbrake'
-gem 'bourbon'
+gem 'foundation-rails'
 gem 'coffee-rails'
 gem 'delayed_job_active_record', '>= 4.0.0'
 gem 'email_validator'
 gem 'flutie'
 gem 'high_voltage'
 gem 'jquery-rails'
-gem 'neat'
 gem 'pg'
 gem 'rack-timeout'
 gem 'rails', '>= 4.0.0'
@@ -17,8 +15,19 @@ gem 'sass-rails'
 gem 'simple_form'
 gem 'uglifier'
 gem 'unicorn'
+gem 'haml-rails'
+
+gem 'memcachier'
+gem 'dalli' # for memcached
+gem 'exception_notification' # for better notifications
 
 group :development do
+  gem 'pry-rails' # better then standard IRB
+  gem 'heroku_san'
+
+  gem 'meta_request'
+  gem 'letter_opener'
+
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'foreman'
