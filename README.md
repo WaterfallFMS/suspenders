@@ -162,15 +162,16 @@ Please see CONTRIBUTING.md for details.
 Credits
 -------
 
-![thoughtbot](http://thoughtbot.com/images/tm/logo.png)
+Thank you, [contributors](https://github.com/WaterfallFMS/guides/graphs/contributors)!
 
-Suspenders is maintained and funded by
-[thoughtbot, inc](http://thoughtbot.com/community).
+![Waterfall Software](http://www.waterfallsoftware.com/sites/default/files/waterfall-logo.png)
 
-The names and logos for thoughtbot are trademarks of thoughtbot, inc.
+Suspenders is maintained by [waterfall software, inc](http://www.waterfallsoftware.com/).
+
+It is based off a project of the same name from Thoughtbot.
 
 License
 -------
 
-Suspenders is Copyright © 2008-2013 thoughtbot. It is free software, and may be
+Suspenders is Copyright © 2008-2013 waterfall software. It is free software, and may be
 redistributed under the terms specified in the LICENSE file.
