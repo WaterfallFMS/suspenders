@@ -328,6 +328,41 @@ git remote add production git@heroku.com:#{app_name}-production.git
       end
     end
 
+    def add_saml_gem
+      inject_into_file "Gemfile", "gem 'omniauth-saml' # for SAML login\n",
+                       :after => "gem 'haml-rails'\n"
+    end
+
+    def add_saml_config
+      config = <<-RUBY
+SAML_IDP_ISSUER=#{app_name}
+SAML_IDP_TARGET_URL=http://saml-idp.dev/saml/auth
+SAML_IDP_CERT_FINGERPRINT=74:51:A0:EE:40:A5:B3:D9:6F:1C:23:8D:59:04:81:8A:4B:12:F5:FF
+SAML_IDP_NAME_FORMAT=urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
+      RUBY
+
+      inject_into_file ".sample.env", config, :after => "SECRET_KEY_BASE=development_secret\n"
+    end
+
+    def configure_saml_routes
+      config = <<-RUBY
+  get  '/auth/failure'       => 'sessions#failure'
+  get  '/auth/saml/metadata' => 'sessions#metadata'
+  post '/auth/saml/callback' => 'sessions#create'
+      RUBY
+
+      inject_into_file "config/routes.rb", config, :before => "end"
+    end
+
+    def copy_saml_controller
+      copy_file 'sessions_controller.rb', 'app/controllers/sessions_controller.rb'
+    end
+
+    def copy_omniauth_config
+      copy_file 'omniauth_initializer.rb', 'config/initializers/omniauth.rb'
+      copy_file 'omniauth_test_setup.rb', 'spec/support/omniauth.rb'
+    end
+
     private
 
     def override_path_for_tests

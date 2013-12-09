@@ -15,6 +15,9 @@ module Suspenders
     class_option :skip_test_unit, :type => :boolean, :aliases => '-T', :default => true,
       :desc => 'Skip Test::Unit files'
 
+    class_option :skip_saml_client, :type => :boolean, :default => false,
+      :desc => 'Skip the generation of SAML client connector'
+
     def finish_template
       invoke :suspenders_customization
       super
@@ -36,6 +39,7 @@ module Suspenders
       invoke :copy_miscellaneous_files
       invoke :customize_error_pages
       invoke :remove_routes_comment_lines
+      invoke :create_saml_client
       invoke :setup_git
       invoke :setup_database
       #invoke :create_heroku_apps
@@ -51,6 +55,7 @@ module Suspenders
     def customize_gemfile
       build :replace_gemfile
       build :set_ruby_to_version_being_used
+      build :add_saml_gem if !options[:skip_saml_client]
       bundle_command 'install'
     end
 
@@ -143,6 +148,16 @@ module Suspenders
       build :setup_stylesheets
     end
 
+    def create_saml_client
+      if !options[:skip_saml_client]
+        say 'Set up SAML config'
+        build :add_saml_config
+        build :configure_saml_routes
+        build :copy_saml_controller
+        build :copy_omniauth_config
+      end
+    end
+
     def setup_git
       if !options[:skip_git]
         say 'Initializing git'
@@ -196,7 +211,6 @@ module Suspenders
 
     def outro
       say 'Congratulations! You just pulled our suspenders.'
-      say "Remember to run 'rails generate airbrake' with your API key."
     end
 
     def run_bundle
