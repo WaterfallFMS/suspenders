@@ -6,8 +6,8 @@ module Suspenders
     class_option :database, :type => :string, :aliases => '-d', :default => 'postgresql',
       :desc => "Preconfigure for selected database (options: #{DATABASES.join('/')})"
 
-    class_option :heroku, :type => :boolean, :aliases => '-H', :default => false,
-      :desc => 'Create staging and production Heroku apps'
+    class_option :heroku, :type => :boolean, :aliases => '-H', :default => true,
+      :desc => 'Setup staging and production Heroku apps'
 
     class_option :github, :type => :string, :aliases => '-G', :default => nil,
       :desc => 'Create Github repository and add remote origin pointed to repo'
@@ -23,6 +23,7 @@ module Suspenders
     def suspenders_customization
       invoke :remove_files_we_dont_need
       invoke :customize_gemfile
+      invoke :setup_heroku_san
       invoke :setup_development_environment
       invoke :setup_test_environment
       invoke :setup_production_environment
@@ -37,7 +38,7 @@ module Suspenders
       invoke :remove_routes_comment_lines
       invoke :setup_git
       invoke :setup_database
-      invoke :create_heroku_apps
+      #invoke :create_heroku_apps
       invoke :create_github_repo
       invoke :outro
     end
@@ -94,6 +95,15 @@ module Suspenders
       build :setup_staging_environment
     end
 
+    def setup_heroku_san
+      if options[:heroku]
+        say 'Setting up heroku deployment configs'
+        build :create_slug_ignore
+        build :copy_heroku_config
+        build :correct_heroku_deploy
+      end
+    end
+
     def setup_secret_token
       say 'Moving secret token out of version control'
       build :setup_secret_token
@@ -142,12 +152,12 @@ module Suspenders
     end
 
     def create_heroku_apps
-      if options[:heroku]
-        say 'Creating Heroku apps'
-        build :create_heroku_apps
-        build :set_heroku_remotes
-        build :set_heroku_rails_secrets
-      end
+      #if options[:heroku]
+      #  say 'Creating Heroku apps'
+      #  build :create_heroku_apps
+      #  build :set_heroku_remotes
+      #  build :set_heroku_rails_secrets
+      #end
     end
 
     def create_github_repo

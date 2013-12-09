@@ -98,6 +98,24 @@ module Suspenders
         "Mail.register_interceptor RecipientInterceptor.new(ENV['EMAIL_RECIPIENTS'])\n"
     end
 
+    def create_slug_ignore
+      copy_file 'slug_ignore', '.slugignore'
+    end
+
+    def copy_heroku_config
+      template 'heroku_san.yml.erb', 'config/heroku.yml'
+    end
+
+    def correct_heroku_deploy
+      config = <<-RUBY
+require Rails.root.join('lib','heroku_deploy') rescue nil
+      RUBY
+
+      copy_file 'heroku_deploy.rb', 'lib/heroku_deploy.rb'
+      inject_into_file 'Rakefile', config,
+        :after => "require File.expand_path('../config/application', __FILE__)\n"
+    end
+
     def setup_secret_token
       template 'secret_token.rb',
         'config/initializers/secret_token.rb',
