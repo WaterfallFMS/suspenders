@@ -7,3 +7,5 @@
 pkg
 test_project
 tmp/aruba
+
+/.idea/
