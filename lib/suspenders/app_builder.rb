@@ -168,6 +168,7 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
       inject_into_file 'Gemfile', "\n\nruby '#{RUBY_VERSION}'",
         after: /source 'https:\/\/rubygems.org'/
       create_file '.ruby-version', "#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}\n"
+      create_file '.ruby-gemset', "#{app_name}\n"
     end
 
     def enable_database_cleaner

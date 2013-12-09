@@ -212,5 +212,9 @@ module Suspenders
     def using_active_record?
       !options[:skip_active_record]
     end
+
+    def bundle_command(command)
+      run "rvm #{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}@#{app_name} --create do bundle #{command}"
+    end
   end
 end
