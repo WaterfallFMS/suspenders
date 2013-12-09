@@ -123,6 +123,7 @@ module Suspenders
       build :configure_rack_timeout
       build :disable_xml_params
       build :setup_default_rake_task
+      build :generate_simple_form
       build :configure_unicorn
       build :setup_foreman
     end

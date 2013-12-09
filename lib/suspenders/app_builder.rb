@@ -216,6 +216,10 @@ module Suspenders
       copy_file 'sample.env', '.sample.env'
       copy_file 'Procfile', 'Procfile'
     end
+    
+    def generate_simple_form
+      generate 'simple_form:install --foundation'
+    end
 
     def setup_stylesheets
       remove_file 'app/assets/stylesheets/application.css'
