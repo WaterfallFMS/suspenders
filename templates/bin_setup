@@ -17,6 +17,7 @@ bundle exec rake db:setup
 # Set up configurable environment variables
 if [ ! -f .env ]; then
   cp .sample.env .env
+  echo "Do not forget to update .env with your IdP settings"
 fi
 
 if [ "7000" -eq "$PORT" ]; then
