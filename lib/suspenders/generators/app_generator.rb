@@ -154,6 +154,10 @@ module Suspenders
         build :add_saml_config
         build :configure_saml_routes
         build :copy_saml_controller
+        build :copy_saml_views
+        build :copy_saml_specs
+        build :copy_saml_models
+        build :copy_saml_migrations
         build :copy_omniauth_config
       end
     end

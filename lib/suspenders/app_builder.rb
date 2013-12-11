@@ -366,6 +366,29 @@ SAML_IDP_NAME_FORMAT=urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
       
       copy_file 'sessions_controller.rb', 'app/controllers/sessions_controller.rb'
     end
+    
+    def copy_saml_views
+      copy_file 'application_index.html.haml', 'app/views/application/index.html.haml'
+      copy_file 'application_internal.html.haml', 'app/views/application/internal.html.haml'
+    end
+    
+    def copy_saml_specs
+      copy_file 'saml_authentication_spec.rb', 'spec/controllers/concerns/saml_authentication_spec.rb'
+      copy_file 'tenant_factory.rb', 'spec/factories/tenants.rb'
+      copy_file 'user_factory.rb',   'spec/factories/users.rb'
+      copy_file 'tenant_model_spec.rb', 'spec/models/tenant_spec.rb'
+      copy_file 'user_model_spec.rb',  'spec/models/user_spec.rb'
+    end
+
+    def copy_saml_migrations
+      copy_file 'create_user_migration.rb', 'db/migrate/20131209215557_create_users.rb'
+      copy_file 'create_tenant_migration.rb', 'db/migrate/20131210131921_create_tenants.rb'
+    end
+
+    def copy_saml_models
+      copy_file 'user_model.rb',   'app/models/user.rb'
+      copy_file 'tenant_model.rb', 'app/models/tenant.rb'
+    end
 
     def copy_omniauth_config
       copy_file 'omniauth_initializer.rb', 'config/initializers/omniauth.rb'
