@@ -349,12 +349,21 @@ SAML_IDP_NAME_FORMAT=urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
   get  '/auth/failure'       => 'sessions#failure'
   get  '/auth/saml/metadata' => 'sessions#metadata'
   post '/auth/saml/callback' => 'sessions#create'
+  get  '/auth/saml/destroy'  => 'sessions#destroy', :as => 'logout'
+
+  get '/internal' => 'application#internal'  # requires login
+
+  root :to => 'application#index'
       RUBY
 
       inject_into_file "config/routes.rb", config, :before => "end"
     end
 
     def copy_saml_controller
+      remove_file 'app/controllers/application_controller.rb'
+      copy_file 'application_controller.rb', 'app/controllers/application_controller.rb'
+      copy_file 'saml_authenticate_concern.rb', 'app/controllers/concerns/saml_authenticate.rb'
+      
       copy_file 'sessions_controller.rb', 'app/controllers/sessions_controller.rb'
     end
 
