@@ -31,6 +31,8 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'foreman'
+  
+  gem 'zeus', '0.13.4.pre2'
 end
 
 group :development, :test do
