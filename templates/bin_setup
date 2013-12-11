@@ -12,7 +12,7 @@ set -e
 bundle check
 
 # Set up the database
-bundle exec rake db:setup
+bundle exec rake db:setup db:test:prepare
 
 # Set up configurable environment variables
 if [ ! -f .env ]; then
