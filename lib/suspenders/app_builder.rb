@@ -186,13 +186,13 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     end
 
     def use_rspec_binstub
-      run 'bundle binstub rspec-core'
+      bundle_command 'binstub rspec-core'
       run 'rm bin/autospec'
     end
 
     def configure_background_jobs_for_rspec
       copy_file 'background_jobs_rspec.rb', 'spec/support/background_jobs.rb'
-      run 'rails g delayed_job:active_record'
+      generate 'delayed_job:active_record'
     end
 
     def configure_time_zone
@@ -378,6 +378,14 @@ SAML_IDP_NAME_FORMAT=urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
 
     def generate_secret
       SecureRandom.hex(64)
+    end
+
+    def bundle_command(command)
+      run "rvm #{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}@#{app_name} --create do bundle #{command}"
+    end
+
+    def generate(command)
+      bundle_command "exec rails g #{command}"
     end
   end
 end
