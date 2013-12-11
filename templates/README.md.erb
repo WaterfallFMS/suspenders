@@ -8,11 +8,19 @@ This repository comes equipped with a self-setup script!
 
     % ./bin/setup
 
-After setting up, you can run the application using [foreman]:
+After setup, run tests to ensure the build script worked:
+
+    % rake
+
+After testing, you can run the application using [foreman]:
 
     % foreman start
 
 [foreman]: http://ddollar.github.io/foreman/
+
+Open the browser directed to the pow DNS entry
+
+    % open http://<%= app_name %>.dev
 
 Guidelines
 ----------
