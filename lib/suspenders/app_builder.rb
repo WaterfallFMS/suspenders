@@ -56,16 +56,16 @@ module Suspenders
     end
 
     def enable_factory_girl_syntax
-      copy_file 'factory_girl_syntax_rspec.rb', 'spec/support/factory_girl.rb'
+      copy_file 'spec/support/factory_girl_syntax_rspec.rb', 'spec/support/factory_girl.rb'
     end
 
     def test_factories_first
-      copy_file 'factories_spec.rb', 'spec/models/factories_spec.rb'
+      copy_file 'spec/models/factories_spec.rb', 'spec/models/factories_spec.rb'
       append_file 'Rakefile', factories_spec_rake_task
     end
 
     def configure_smtp
-      copy_file 'smtp.rb', 'config/initializers/smtp.rb'
+      copy_file 'config/initializers/smtp.rb', 'config/initializers/smtp.rb'
 
       prepend_file 'config/environments/production.rb',
         "require Rails.root.join('config/initializers/smtp')\n"
@@ -103,7 +103,7 @@ module Suspenders
     end
 
     def copy_heroku_config
-      template 'heroku_san.yml.erb', 'config/heroku.yml'
+      template 'config/heroku_san.yml.erb', 'config/heroku.yml'
     end
 
     def correct_heroku_deploy
@@ -111,13 +111,13 @@ module Suspenders
 require Rails.root.join('lib','heroku_deploy') rescue nil
       RUBY
 
-      copy_file 'heroku_deploy.rb', 'lib/heroku_deploy.rb'
+      copy_file 'lib/heroku_deploy.rb', 'lib/heroku_deploy.rb'
       inject_into_file 'Rakefile', config,
         :after => "require File.expand_path('../config/application', __FILE__)\n"
     end
 
     def setup_secret_token
-      template 'secret_token.rb',
+      template 'config/initializers/secret_token.rb',
         'config/initializers/secret_token.rb',
         :force => true
     end
@@ -127,15 +127,15 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     end
 
     def create_shared_flashes
-      copy_file '_flashes.html.erb', 'app/views/application/_flashes.html.erb'
+      copy_file 'views/application/_flashes.html.erb', 'app/views/application/_flashes.html.erb'
     end
 
     def create_shared_javascripts
-      copy_file '_javascript.html.erb', 'app/views/application/_javascript.html.erb'
+      copy_file 'views/application/_javascript.html.erb', 'app/views/application/_javascript.html.erb'
     end
 
     def create_application_layout
-      template 'suspenders_layout.html.erb.erb',
+      template 'views/layouts/application.html.erb.erb',
         'app/views/layouts/application.html.erb',
         :force => true
     end
@@ -151,7 +151,7 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     end
 
     def use_postgres_config_template
-      template 'postgresql_database.yml.erb', 'config/database.yml',
+      template 'config/postgresql_database.yml.erb', 'config/database.yml',
         :force => true
     end
 
@@ -172,7 +172,7 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     end
 
     def enable_database_cleaner
-      copy_file 'database_cleaner_rspec.rb', 'spec/support/database_cleaner.rb'
+      copy_file 'spec/support/database_cleaner_rspec.rb', 'spec/support/database_cleaner.rb'
     end
 
     def configure_spec_support_features
@@ -182,7 +182,7 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
 
     def configure_rspec
       remove_file 'spec/spec_helper.rb'
-      copy_file 'spec_helper.rb', 'spec/spec_helper.rb'
+      copy_file 'spec/spec_helper.rb', 'spec/spec_helper.rb'
     end
 
     def use_rspec_binstub
@@ -191,7 +191,7 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     end
 
     def configure_background_jobs_for_rspec
-      copy_file 'background_jobs_rspec.rb', 'spec/support/background_jobs.rb'
+      copy_file 'spec/support/background_jobs_rspec.rb', 'spec/support/background_jobs.rb'
       generate 'delayed_job:active_record'
     end
 
@@ -205,11 +205,11 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
 
     def configure_time_formats
       remove_file 'config/locales/en.yml'
-      copy_file 'config_locales_en.yml', 'config/locales/en.yml'
+      copy_file 'config/locales/en.yml', 'config/locales/en.yml'
     end
 
     def configure_rack_timeout
-      copy_file 'rack_timeout.rb', 'config/initializers/rack_timeout.rb'
+      copy_file 'config/initializers/rack_timeout.rb', 'config/initializers/rack_timeout.rb'
     end
 
     def configure_action_mailer
@@ -297,7 +297,7 @@ git remote add production git@heroku.com:#{app_name}-production.git
     end
 
     def copy_miscellaneous_files
-      copy_file 'errors.rb', 'config/initializers/errors.rb'
+      copy_file 'config/initializers/errors.rb', 'config/initializers/errors.rb'
     end
 
     def customize_error_pages
@@ -319,7 +319,7 @@ git remote add production git@heroku.com:#{app_name}-production.git
     end
 
     def disable_xml_params
-      copy_file 'disable_xml_params.rb', 'config/initializers/disable_xml_params.rb'
+      copy_file 'config/initializers/disable_xml_params.rb', 'config/initializers/disable_xml_params.rb'
     end
 
     def setup_default_rake_task
@@ -361,38 +361,38 @@ SAML_IDP_NAME_FORMAT=urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
 
     def copy_saml_controller
       remove_file 'app/controllers/application_controller.rb'
-      copy_file 'application_controller.rb', 'app/controllers/application_controller.rb'
-      copy_file 'saml_authenticate_concern.rb', 'app/controllers/concerns/saml_authenticate.rb'
+      copy_file 'controllers/application_controller.rb', 'app/controllers/application_controller.rb'
+      copy_file 'controllers/concerns/saml_authenticate.rb', 'app/controllers/concerns/saml_authenticate.rb'
       
-      copy_file 'sessions_controller.rb', 'app/controllers/sessions_controller.rb'
+      copy_file 'controllers/sessions_controller.rb', 'app/controllers/sessions_controller.rb'
     end
     
     def copy_saml_views
-      copy_file 'application_index.html.haml', 'app/views/application/index.html.haml'
-      copy_file 'application_internal.html.haml', 'app/views/application/internal.html.haml'
+      copy_file 'views/application/index.html.haml', 'app/views/application/index.html.haml'
+      copy_file 'views/application/internal.html.haml', 'app/views/application/internal.html.haml'
     end
     
     def copy_saml_specs
-      copy_file 'saml_authentication_spec.rb', 'spec/controllers/concerns/saml_authentication_spec.rb'
-      copy_file 'tenant_factory.rb', 'spec/factories/tenants.rb'
-      copy_file 'user_factory.rb',   'spec/factories/users.rb'
-      copy_file 'tenant_model_spec.rb', 'spec/models/tenant_spec.rb'
-      copy_file 'user_model_spec.rb',  'spec/models/user_spec.rb'
+      copy_file 'spec/controllers/concerns/saml_authentication_spec.rb', 'spec/controllers/concerns/saml_authentication_spec.rb'
+      copy_file 'spec/factories/tenants.rb', 'spec/factories/tenants.rb'
+      copy_file 'spec/factories/users.rb',   'spec/factories/users.rb'
+      copy_file 'spec/models/tenant_spec.rb', 'spec/models/tenant_spec.rb'
+      copy_file 'spec/models/user_spec.rb',  'spec/models/user_spec.rb'
     end
 
     def copy_saml_migrations
-      copy_file 'create_user_migration.rb', 'db/migrate/20131209215557_create_users.rb'
-      copy_file 'create_tenant_migration.rb', 'db/migrate/20131210131921_create_tenants.rb'
+      copy_file 'db/create_user_migration.rb', 'db/migrate/20131209215557_create_users.rb'
+      copy_file 'db/create_tenant_migration.rb', 'db/migrate/20131210131921_create_tenants.rb'
     end
 
     def copy_saml_models
-      copy_file 'user_model.rb',   'app/models/user.rb'
-      copy_file 'tenant_model.rb', 'app/models/tenant.rb'
+      copy_file 'models/user.rb',   'app/models/user.rb'
+      copy_file 'models/tenant.rb', 'app/models/tenant.rb'
     end
 
     def copy_omniauth_config
-      copy_file 'omniauth_initializer.rb', 'config/initializers/omniauth.rb'
-      copy_file 'omniauth_test_setup.rb', 'spec/support/omniauth.rb'
+      copy_file 'config/initializers/omniauth_initializer.rb', 'config/initializers/omniauth.rb'
+      copy_file 'spec/support/omniauth_test_setup.rb', 'spec/support/omniauth.rb'
     end
 
     private
