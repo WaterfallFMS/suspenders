@@ -7,6 +7,7 @@ require File.expand_path('../../config/environment', __FILE__)
 
 require 'rspec/rails'
 require 'webmock/rspec'
+require 'pundit/rspec'
 
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |file| require file }
 
@@ -19,7 +20,7 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  config.fail_fast = true
+  #config.fail_fast = true
   config.include Features, type: :feature
   config.infer_base_class_for_anonymous_controllers = false
   config.order = 'random'

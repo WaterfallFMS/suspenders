@@ -1,8 +1,11 @@
 class Tenant < ActiveRecord::Base
-  validates :uuid, :presence => true, :uniqueness => true
-  validates :name, :presence => true, :uniqueness => true
+  include TenantContainer
 
   has_many :users
+  has_many :forums
+
+  validates :uuid, :presence => true, :uniqueness => true
+  validates :name, :presence => true
 
   def self.find_or_create_from_saml(account_hash)
     values = JSON.parse(account_hash)
@@ -11,6 +14,9 @@ class Tenant < ActiveRecord::Base
     found ||= Tenant.new :uuid => values['uuid']
     found.name = values['name']
     found.save!
+
+    self.current_id = found.id
+
     found
   end
 end

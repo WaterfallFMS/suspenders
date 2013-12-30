@@ -1,0 +1,10 @@
+<% for attribute in attributes -%>
+%p
+  %b= <%= class_name %>.human_attribute_name :<%= attribute.name %>
+  \:
+  = <%= singular_table_name %>.<%= attribute.name %>
+<% end -%>
+
+= edit_link <%= singular_table_name %>, edit_<%= singular_table_name %>_path(<%= singular_table_name %>)
+\|
+= link_to 'Back', <%= index_helper %>_path

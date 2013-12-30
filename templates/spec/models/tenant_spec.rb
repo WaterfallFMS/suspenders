@@ -30,5 +30,10 @@ describe Tenant do
       expect(found.name).to eq tenant_info['name']
       expect(found.uuid).to eq tenant_info['uuid']
     end
+
+    it 'sets the thread safe tenant id' do
+      found = Tenant.find_or_create_from_saml tenant_json
+      expect(Tenant.current_id).to eq found.id
+    end
   end
 end

@@ -1,0 +1,4 @@
+:tddium:
+  :ruby_version: ruby-2.0.0-p353
+  :postgresql:
+    :version: '9.2'

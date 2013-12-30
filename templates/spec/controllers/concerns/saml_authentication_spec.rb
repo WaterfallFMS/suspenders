@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-class TestController < ActionController::Base
-  include SamlAuthenticate
+class TestController < ApplicationController
 end
 
 
@@ -36,14 +35,16 @@ describe TestController do
   end
 
   context '.login_from_session' do
-    it 'check the session cookie for user id' do
-      controller.session.should_receive(:[]).with(:user_id)
+    it 'check the session cookie for tenant and user id' do
+      controller.session.should_receive(:[]).with(:tenant_id).once
+      controller.session.should_receive(:[]).with(:user_id).at_least(:once)
       controller.login_from_session
     end
 
     it 'returns the found user and sets current_user' do
       user = create :user
-      controller.session[:user_id] = user.id
+      controller.session[:tenant_id] = user.tenant_id
+      controller.session[:user_id]   = user.id
 
       expect(controller.login_from_session).to eq user
       expect(controller.current_user).to eq user

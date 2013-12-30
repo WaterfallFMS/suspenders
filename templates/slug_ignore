@@ -18,7 +18,3 @@ public/README.md
 rerun.txt
 spec
 test
-app/views/themes/demo/data
-app/assets
-lib/assets
-vendor/assets

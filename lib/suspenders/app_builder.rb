@@ -55,8 +55,12 @@ module Suspenders
       inject_into_class 'config/application.rb', 'Application', config
     end
 
+    def copy_tddium
+      copy_file 'config/tddium.yml', 'config/tddium.yml'
+    end
+
     def enable_factory_girl_syntax
-      copy_file 'spec/support/factory_girl_syntax_rspec.rb', 'spec/support/factory_girl.rb'
+      #copy_file 'spec/support/factory_girl_syntax_rspec.rb', 'spec/support/factory_girl.rb'
     end
 
     def test_factories_first
@@ -135,9 +139,10 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     end
 
     def create_application_layout
-      template 'views/layouts/application.html.erb.erb',
-        'app/views/layouts/application.html.erb',
-        :force => true
+      remove_file 'app/views/layouts/application.html.erb'
+      #template 'views/layouts/application.html.erb.erb',
+      #  'app/views/layouts/application.html.erb',
+      #  :force => true
     end
 
     def remove_turbolinks
@@ -147,6 +152,7 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     end
 
     def create_common_javascripts
+      remove_file 'app/assets/javascript/application.js'
       directory 'javascripts', 'app/assets/javascripts'
     end
 
@@ -172,7 +178,7 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     end
 
     def enable_database_cleaner
-      copy_file 'spec/support/database_cleaner_rspec.rb', 'spec/support/database_cleaner.rb'
+      #copy_file 'spec/support/database_cleaner_rspec.rb', 'spec/support/database_cleaner.rb'
     end
 
     def configure_spec_support_features
@@ -191,7 +197,7 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     end
 
     def configure_background_jobs_for_rspec
-      copy_file 'spec/support/background_jobs_rspec.rb', 'spec/support/background_jobs.rb'
+      #copy_file 'spec/support/background_jobs_rspec.rb', 'spec/support/background_jobs.rb'
       generate 'delayed_job:active_record'
     end
 
@@ -231,6 +237,18 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
       copy_file 'unicorn.rb', 'config/unicorn.rb'
     end
 
+    def copy_helpers
+      directory 'helpers', 'app/helpers'
+    end
+
+    def copy_policies
+      directory 'policies', 'app/policies'
+    end
+
+    def copy_templates
+      directory 'lib/templates', 'lib/templates'
+    end
+
     def setup_foreman
       copy_file 'sample.env', '.sample.env'
       copy_file 'Procfile', 'Procfile'
@@ -238,6 +256,7 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     
     def generate_simple_form
       generate 'simple_form:install --foundation'
+      copy_file 'lib/templates/haml/scaffold/_form.html.haml', 'lib/templates/haml/scaffold/_form.html.haml'
     end
 
     def setup_stylesheets
@@ -349,11 +368,13 @@ SAML_IDP_NAME_FORMAT=urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
   get  '/auth/failure'       => 'sessions#failure'
   get  '/auth/saml/metadata' => 'sessions#metadata'
   post '/auth/saml/callback' => 'sessions#create'
+  get  '/auth/saml/callback' => 'sessions#create' if Rails.env.test?
   get  '/auth/saml/destroy'  => 'sessions#destroy', :as => 'logout'
 
+  # replace with real actions
   get '/internal' => 'application#internal'  # requires login
 
-  root :to => 'application#index'
+  root :to => 'root#index'
       RUBY
 
       inject_into_file "config/routes.rb", config, :before => "end"
@@ -361,23 +382,25 @@ SAML_IDP_NAME_FORMAT=urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
 
     def copy_saml_controller
       remove_file 'app/controllers/application_controller.rb'
-      copy_file 'controllers/application_controller.rb', 'app/controllers/application_controller.rb'
-      copy_file 'controllers/concerns/saml_authenticate.rb', 'app/controllers/concerns/saml_authenticate.rb'
-      
-      copy_file 'controllers/sessions_controller.rb', 'app/controllers/sessions_controller.rb'
+      directory 'controllers', 'app/controllers'
+      #copy_file 'controllers/application_controller.rb', 'app/controllers/application_controller.rb'
+      #copy_file 'controllers/concerns/saml_authenticate.rb', 'app/controllers/concerns/saml_authenticate.rb'
+      #copy_file 'controllers/sessions_controller.rb', 'app/controllers/sessions_controller.rb'
     end
     
     def copy_saml_views
-      copy_file 'views/application/index.html.haml', 'app/views/application/index.html.haml'
-      copy_file 'views/application/internal.html.haml', 'app/views/application/internal.html.haml'
+      directory 'views', 'app/views'
+      #copy_file 'views/application/index.html.haml', 'app/views/application/index.html.haml'
+      #copy_file 'views/application/internal.html.haml', 'app/views/application/internal.html.haml'
     end
     
     def copy_saml_specs
-      copy_file 'spec/controllers/concerns/saml_authentication_spec.rb', 'spec/controllers/concerns/saml_authentication_spec.rb'
-      copy_file 'spec/factories/tenants.rb', 'spec/factories/tenants.rb'
-      copy_file 'spec/factories/users.rb',   'spec/factories/users.rb'
-      copy_file 'spec/models/tenant_spec.rb', 'spec/models/tenant_spec.rb'
-      copy_file 'spec/models/user_spec.rb',  'spec/models/user_spec.rb'
+      directory 'spec', 'spec'
+      #copy_file 'spec/controllers/concerns/saml_authentication_spec.rb', 'spec/controllers/concerns/saml_authentication_spec.rb'
+      #copy_file 'spec/factories/tenants.rb', 'spec/factories/tenants.rb'
+      #copy_file 'spec/factories/users.rb',   'spec/factories/users.rb'
+      #copy_file 'spec/models/tenant_spec.rb', 'spec/models/tenant_spec.rb'
+      #copy_file 'spec/models/user_spec.rb',  'spec/models/user_spec.rb'
     end
 
     def copy_saml_migrations
@@ -386,13 +409,14 @@ SAML_IDP_NAME_FORMAT=urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
     end
 
     def copy_saml_models
-      copy_file 'models/user.rb',   'app/models/user.rb'
-      copy_file 'models/tenant.rb', 'app/models/tenant.rb'
+      directory 'models', 'app/models'
+      #copy_file 'models/user.rb',   'app/models/user.rb'
+      #copy_file 'models/tenant.rb', 'app/models/tenant.rb'
     end
 
     def copy_omniauth_config
-      copy_file 'config/initializers/omniauth_initializer.rb', 'config/initializers/omniauth.rb'
-      copy_file 'spec/support/omniauth_test_setup.rb', 'spec/support/omniauth.rb'
+      copy_file 'config/initializers/omniauth.rb', 'config/initializers/omniauth.rb'
+      #copy_file 'spec/support/omniauth_test_setup.rb', 'spec/support/omniauth.rb'
     end
 
     private

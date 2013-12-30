@@ -32,6 +32,7 @@ module Suspenders
       invoke :setup_production_environment
       invoke :setup_staging_environment
       invoke :setup_secret_token
+      invoke :setup_ci
       invoke :create_suspenders_views
       invoke :setup_coffeescript
       invoke :configure_app
@@ -114,6 +115,11 @@ module Suspenders
       build :setup_secret_token
     end
 
+    def setup_ci
+      say 'Setting up Tddium config'
+      build :copy_tddium
+    end
+
     def create_suspenders_views
       say 'Creating suspenders views'
       build :create_partials_directory
@@ -130,6 +136,9 @@ module Suspenders
 
     def configure_app
       say 'Configuring app'
+      build :copy_helpers
+      build :copy_policies
+      build :copy_templates
       build :configure_action_mailer
       build :blacklist_active_record_attributes
       build :configure_strong_parameters
