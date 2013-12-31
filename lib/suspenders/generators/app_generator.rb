@@ -38,6 +38,7 @@ module Suspenders
       invoke :copy_miscellaneous_files
       invoke :customize_error_pages
       invoke :remove_routes_comment_lines
+      invoke :setup_saml
       invoke :setup_git
       invoke :setup_database
       #invoke :create_heroku_apps
@@ -60,7 +61,7 @@ module Suspenders
       build :copy_lib
       build :copy_models
       build :copy_policies
-      build :copy_spec
+      # spec copy is done with setting up test
       build :copy_views
     end
 
@@ -92,7 +93,7 @@ module Suspenders
       say 'Setting up the test environment'
       build :test_factories_first
       build :generate_rspec
-      build :configure_rspec
+      build :copy_spec
       build :use_rspec_binstub
       build :configure_background_jobs_for_rspec
       build :enable_database_cleaner
@@ -211,6 +212,11 @@ module Suspenders
 
     def remove_routes_comment_lines
       build :remove_routes_comment_lines
+    end
+
+    def setup_saml
+      build :add_saml_config
+      build :configure_saml_routes
     end
 
     def outro

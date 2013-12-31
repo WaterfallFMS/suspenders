@@ -8,7 +8,7 @@ production: &production
     - scheduler:standard
   config: &production-config
     SECRET_KEY_BASE:           <%= SecureRandom.hex(64) %>
-    SAML_IDP_ISSUER:           waterfall-forum
+    SAML_IDP_ISSUER:           <%= app_name %>
     SAML_IDP_TARGET_URL:       http://wf4-saml-idp.herokuapp.com/saml/auth
     SAML_IDP_CERT_FINGERPRINT: 74:51:A0:EE:40:A5:B3:D9:6F:1C:23:8D:59:04:81:8A:4B:12:F5:FF
     SAML_IDP_NAME_FORMAT:      urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
@@ -16,4 +16,4 @@ production: &production
 
 staging:
   <<: *production
-  app: waterfall-<%= app_name %>-staging
+  app: wf4-<%= app_name %>-staging

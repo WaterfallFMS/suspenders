@@ -15,7 +15,8 @@ module Suspenders
     end
 
     def copy_config
-      directory 'suspender_config', 'config', :exclude => /\.rb\.erb/
+      remove_file 'config/locales/en.yml'
+      directory 'suspender_config', 'config', :exclude_pattern => /\.erb/
       invoke :setup_secret_token
     end
 
@@ -30,6 +31,7 @@ module Suspenders
     end
 
     def copy_helpers
+      remove_file 'app/helpers/application_helper.rb'
       directory 'helpers', 'app/helpers'
     end
 
@@ -42,7 +44,7 @@ module Suspenders
     end
 
     def copy_javascripts
-      remove_file 'app/assets/javascript/application.js'
+      remove_file 'app/assets/javascripts/application.js'
       directory 'javascripts', 'app/assets/javascripts'
     end
 
@@ -51,6 +53,7 @@ module Suspenders
     end
 
     def copy_spec
+      remove_file 'spec/spec_helper.rb'
       directory 'spec', 'spec'
     end
 
@@ -186,6 +189,7 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
       replace_in_file 'app/assets/javascripts/application.js',
         /\/\/= require turbolinks\n/,
         ''
+    rescue
     end
 
     def use_postgres_config_template
@@ -216,11 +220,6 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     def configure_spec_support_features
       empty_directory_with_keep_file 'spec/features'
       empty_directory_with_keep_file 'spec/support/features'
-    end
-
-    def configure_rspec
-      remove_file 'spec/spec_helper.rb'
-      copy_file 'spec/spec_helper.rb', 'spec/spec_helper.rb'
     end
 
     def use_rspec_binstub
