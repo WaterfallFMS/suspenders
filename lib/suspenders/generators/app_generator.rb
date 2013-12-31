@@ -15,9 +15,6 @@ module Suspenders
     class_option :skip_test_unit, :type => :boolean, :aliases => '-T', :default => true,
       :desc => 'Skip Test::Unit files'
 
-    class_option :skip_saml_client, :type => :boolean, :default => false,
-      :desc => 'Skip the generation of SAML client connector'
-
     def finish_template
       invoke :suspenders_customization
       super
@@ -25,6 +22,7 @@ module Suspenders
 
     def suspenders_customization
       invoke :remove_files_we_dont_need
+      invoke :copy_common_directories
       invoke :customize_gemfile
       invoke :setup_heroku_san
       invoke :setup_development_environment
@@ -40,7 +38,6 @@ module Suspenders
       invoke :copy_miscellaneous_files
       invoke :customize_error_pages
       invoke :remove_routes_comment_lines
-      invoke :create_saml_client
       invoke :setup_git
       invoke :setup_database
       #invoke :create_heroku_apps
@@ -53,10 +50,23 @@ module Suspenders
       build :remove_rails_logo_image
     end
 
+    def copy_common_directories
+      say 'Coping common files'
+      build :copy_config
+      build :copy_controllers
+      build :copy_migrations
+      build :copy_helpers
+      build :copy_javascripts
+      build :copy_lib
+      build :copy_models
+      build :copy_policies
+      build :copy_spec
+      build :copy_views
+    end
+
     def customize_gemfile
       build :replace_gemfile
       build :set_ruby_to_version_being_used
-      build :add_saml_gem if !options[:skip_saml_client]
       bundle_command 'install'
     end
 
@@ -80,7 +90,6 @@ module Suspenders
 
     def setup_test_environment
       say 'Setting up the test environment'
-      build :enable_factory_girl_syntax
       build :test_factories_first
       build :generate_rspec
       build :configure_rspec
@@ -131,14 +140,10 @@ module Suspenders
     def setup_coffeescript
       say 'Setting up CoffeeScript defaults'
       build :remove_turbolinks
-      build :create_common_javascripts
     end
 
     def configure_app
       say 'Configuring app'
-      build :copy_helpers
-      build :copy_policies
-      build :copy_templates
       build :configure_action_mailer
       build :blacklist_active_record_attributes
       build :configure_strong_parameters
@@ -155,20 +160,6 @@ module Suspenders
     def setup_stylesheets
       say 'Set up stylesheets'
       build :setup_stylesheets
-    end
-
-    def create_saml_client
-      if !options[:skip_saml_client]
-        say 'Set up SAML config'
-        build :add_saml_config
-        build :configure_saml_routes
-        build :copy_saml_controller
-        build :copy_saml_views
-        build :copy_saml_specs
-        build :copy_saml_models
-        build :copy_saml_migrations
-        build :copy_omniauth_config
-      end
     end
 
     def setup_git
@@ -231,6 +222,10 @@ module Suspenders
     end
 
     protected
+
+    def stop
+      raise 'System halted'
+    end
 
     def get_builder_class
       Suspenders::AppBuilder
