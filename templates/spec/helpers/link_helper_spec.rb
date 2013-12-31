@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe LinkHelper do
-  before       {helper.stub can?: true}
-  let(:object) {build :forum}
+  before       {helper.stub can?: true, users_path: '/users'}
+  let(:object) {build :user}
 
   context '.show_link' do
     it 'returns empty if user cannot show object' do

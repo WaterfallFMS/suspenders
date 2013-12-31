@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 describe ApplicationPolicy do
-  let(:policy) {ApplicationPolicy.new user, object}
+  let(:policy) {ApplicationPolicy.new user, user}
   let(:user)   {build :user}
-  let(:object) {build :forum}
 
   context '.can_set?' do
     it 'checks if the attribute exists in permitted_attributes' do

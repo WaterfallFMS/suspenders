@@ -15,7 +15,7 @@ describe PolicyHelper do
   end
   let(:policy) {FakePolicy.new user, object}
   let(:user)   {build :user}
-  let(:object) {build :forum}
+  let(:object) {build :user}
 
   context '.can?' do
     it 'sends the ? method to the policy object' do
