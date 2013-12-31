@@ -4,9 +4,11 @@ module SamlAuthenticate
 
   included do
     before_filter :require_login
-    helper_method :login_path
     helper_method :current_user
     helper_method :logged_in?
+
+    include FakePathHelper
+    include PolicyHelper
   end
 
 
