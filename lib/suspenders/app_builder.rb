@@ -388,7 +388,7 @@ SAML_IDP_NAME_FORMAT=urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress
   get  '/auth/saml/destroy'  => 'sessions#destroy', :as => 'logout'
 
   # replace with real actions
-  get '/internal' => 'application#internal'  # requires login
+  get '/internal' => 'root#internal'  # requires login
 
   root :to => 'root#index'
       RUBY
