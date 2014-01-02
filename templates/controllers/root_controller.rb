@@ -7,4 +7,7 @@ class RootController < ApplicationController
       redirect_to forums_path
     end
   end
+  
+  def internal
+  end
 end

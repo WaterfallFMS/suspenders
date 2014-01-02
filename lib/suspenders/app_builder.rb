@@ -90,11 +90,13 @@ module Suspenders
     config.generators do |generate|
       generate.helper false
       generate.javascript_engine false
+      generate.view_specs false
       generate.request_specs false
       generate.routing_specs false
+      generate.controller_specs false
       generate.stylesheets false
       generate.test_framework :rspec
-      generate.view_specs false
+      generate.template_engine :haml
     end
 
       RUBY
@@ -274,8 +276,8 @@ require Rails.root.join('lib','heroku_deploy') rescue nil
     end
     
     def generate_simple_form
-      generate 'simple_form:install --foundation'
-      copy_file 'lib/templates/haml/scaffold/_form.html.haml', 'lib/templates/haml/scaffold/_form.html.haml'
+      generate 'simple_form:install --foundation --force'
+      copy_file 'lib/templates/haml/scaffold/_form.html.haml', 'lib/templates/haml/scaffold/_form.html.haml', :force => true
     end
 
     def setup_stylesheets

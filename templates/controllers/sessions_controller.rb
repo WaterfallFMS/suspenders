@@ -1,6 +1,9 @@
 class SessionsController < ApplicationController
   skip_before_action :require_login
   skip_before_action :verify_authenticity_token # SAML comes from an external site
+  skip_after_action  :verify_authorized
+  skip_after_action  :verify_policy_scoped
+
   before_filter :check_module_enabled, :only => :create
 
   def create

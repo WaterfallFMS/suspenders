@@ -7,6 +7,7 @@ module SamlAuthenticate
     helper_method :current_user
     helper_method :logged_in?
 
+    include Pundit
     include FakePathHelper
     include PolicyHelper
   end
